@@ -1,0 +1,104 @@
+import inspect
+import re
+from cmath import phase
+from math import pi, sqrt
+from pathlib import Path
+
+import aocd
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=Path(__file__).parents[1] / ".env")
+
+
+YEAR = 2020
+PROJECT_ROOT_PATH = Path(__file__).parents[1]
+
+
+class DataName:
+    SAMPLE_1 = "sample1.txt"
+    SAMPLE_2 = "sample2.txt"
+    PUZZLE = "puzzle.txt"
+
+
+def fetch_input_data_if_not_exists():
+    """
+    Meant to be used from run.py within a dayX-module
+
+    Returns:
+        str: The data
+    """
+    day_num = _get_day_num()
+    output_filepath = _create_data_dirpath(day_num) / DataName.PUZZLE
+    if output_filepath.is_file():
+        print("Input data already fetched")
+        return
+    print("Fetching input data")
+    output_filepath.write_text(aocd.get_data(day=day_num, year=YEAR))
+
+
+def submit(solution, part):
+    aocd.submit(solution, part, day=_get_day_num(), year=YEAR)
+
+
+def solve_and_print(input_parser, solver, part, input_file_name, do_submit=False):
+    text = f"{input_file_name}, part {part}:"
+    print(f"{text:<25}", answer := solver(*input_parser(input_file_name)))
+    if do_submit:
+        submit(answer, part)
+
+
+def _get_day_num():
+    caller_filepath = _get_caller_filepath()
+    return int(re.search("day(\d+)", caller_filepath.name).group(1))
+
+
+def angle(v1, v2):
+    ang = phase(complex(*v1)) - phase(complex(*v2))
+    if ang < 0:
+        return 2 * pi + ang
+    return ang
+
+
+def distance(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+    return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+
+def manhattan_distance(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+    return abs(x2 - x1) + abs(y2 - y1)
+
+
+def read_comma_separated_list(input_file_name=DataName.PUZZLE, cast_to=str):
+    return _read_list(input_file_name, ",", cast_to)
+
+
+def read_line_separated_list(input_file_name=DataName.PUZZLE, cast_to=str):
+    return _read_list(input_file_name, "\n", cast_to)
+
+
+def _read_list(input_file_name, split_char, cast_to):
+    return list(map(cast_to, read(input_file_name).split(split_char)))
+
+
+def read(input_file_name=DataName.PUZZLE):
+    with open(_create_data_dirpath(_get_day_num()) / input_file_name) as f:
+        return f.read().strip()
+
+
+def _get_caller_filepath():
+    """
+    To get the file path of the caller:
+    https://stackoverflow.com/questions/13699283/how-to-get-the-callers-filename-method-name-in-python
+
+    Returns:
+        pathlib.Path: The path to the caller
+    """
+    caller = inspect.stack()[-1]
+    return Path(caller[0].f_code.co_filename)
+
+
+def _create_data_dirpath(day_num):
+    return PROJECT_ROOT_PATH / "data" / f"day{day_num}"
