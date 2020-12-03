@@ -99,7 +99,7 @@ def print_call(func):
         _kwargs_str = _dict_to_str(inspect.getcallargs(func, *args, **kwargs))
         print("---")
         print(f">> {func.__name__}({_truncate_text(_kwargs_str, 50)})")
-        print(f"{return_val}")
+        print(return_val)
         return return_val
 
     return wrapper
