@@ -1,6 +1,7 @@
 import inspect
 import re
 from cmath import phase
+from functools import lru_cache, reduce
 from math import pi, sqrt
 from pathlib import Path
 
@@ -47,9 +48,17 @@ def solve_and_print(input_parser, solver, part, input_file_name, do_submit=False
         submit(answer, part)
 
 
+# It's ok to use lru_cache since we will never run solving for more than a single day in one process
+@lru_cache()
 def _get_day_num():
     caller_filepath = _get_caller_filepath()
-    return int(re.search("day(\d+)", caller_filepath.name).group(1))
+    if (day_num_match := re.search("day(\d+)", caller_filepath.name)) is None:
+        # Will happen in e.g. debug-mode
+        day_num_str = input("Could not infer day number. Which day is it?")
+        print()
+    else:
+        day_num_str = day_num_match.group(1)
+    return int(day_num_str)
 
 
 def angle(v1, v2):
@@ -102,3 +111,13 @@ def _get_caller_filepath():
 
 def _create_data_dirpath(day_num):
     return PROJECT_ROOT_PATH / "data" / f"day{day_num}"
+
+
+def pattern_extract(pattern, text, *types):
+    if (match := re.search(pattern, text)) is None:
+        return []
+    return [t(g) for g, t in zip(match.groups(), types)]
+
+
+def product(iterable):
+    return reduce(lambda a, b: a * b, iterable)

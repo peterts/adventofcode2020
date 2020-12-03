@@ -1,4 +1,4 @@
-from functools import partial, reduce
+from functools import partial
 from itertools import combinations
 
 from more_itertools import first_true
@@ -6,6 +6,7 @@ from more_itertools import first_true
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
+    product,
     read_line_separated_list,
     solve_and_print,
 )
@@ -13,10 +14,6 @@ from adventofcode2020.utils import (
 
 def product_where_sum_of_combo_equals_n(values, combo_length, n):
     return product(first_true(combinations(values, combo_length), pred=lambda c: sum(c) == n))
-
-
-def product(iterable):
-    return reduce(lambda a, b: a * b, iterable)
 
 
 def solve_part1(values):
@@ -37,7 +34,7 @@ if __name__ == "__main__":
     _solve_and_print_b = partial(solve_and_print, read_and_parse_input, solve_part2, "b")
 
     _solve_and_print_a(DataName.SAMPLE_1)
-    _solve_and_print_a(DataName.PUZZLE)
+    _solve_and_print_a(DataName.PUZZLE, submit=False)
 
     _solve_and_print_b(DataName.SAMPLE_1)
-    _solve_and_print_b(DataName.PUZZLE)
+    _solve_and_print_b(DataName.PUZZLE, submit=False)
