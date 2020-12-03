@@ -1,20 +1,23 @@
-from functools import partial
+from more_itertools import quantify
 
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
     pattern_extract,
+    print_call,
     read_line_separated_list,
-    solve_and_print,
+    submit,
 )
 
 
-def read_and_parse_input1(file_name):
-    return (read_line_separated_list(file_name, cast_to=_is_valid_password1),)
+@print_call
+def solve_part1(file_name):
+    return quantify(read_line_separated_list(file_name), pred=_is_valid_password1)
 
 
-def read_and_parse_input2(file_name):
-    return (read_line_separated_list(file_name, cast_to=_is_valid_password2),)
+@print_call
+def solve_part2(file_name):
+    return quantify(read_line_separated_list(file_name), pred=_is_valid_password2)
 
 
 def _is_valid_password1(line):
@@ -33,11 +36,13 @@ def _parse_line(line):
 
 if __name__ == "__main__":
     fetch_input_data_if_not_exists()
-    _solve_and_print_a = partial(solve_and_print, read_and_parse_input1, sum, "a")
-    _solve_and_print_b = partial(solve_and_print, read_and_parse_input2, sum, "b")
 
-    _solve_and_print_a(DataName.SAMPLE_1)
-    _solve_and_print_a(DataName.PUZZLE, submit=False)
+    part = "a"
+    solve_part1(DataName.SAMPLE_1)
+    answer = solve_part1(DataName.PUZZLE)
+    submit(answer, part)
 
-    _solve_and_print_b(DataName.SAMPLE_1)
-    _solve_and_print_b(DataName.PUZZLE, submit=False)
+    part = "b"
+    solve_part2(DataName.SAMPLE_1)
+    answer = solve_part2(DataName.PUZZLE)
+    submit(answer, part)

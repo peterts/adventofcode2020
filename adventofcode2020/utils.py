@@ -1,7 +1,8 @@
 import inspect
 import re
 from cmath import phase
-from functools import lru_cache, reduce
+from functools import lru_cache, reduce, wraps
+from itertools import starmap
 from math import pi, sqrt
 from pathlib import Path
 
@@ -39,13 +40,6 @@ def fetch_input_data_if_not_exists():
 
 def submit(solution, part):
     aocd.submit(solution, part, day=_get_day_num(), year=YEAR)
-
-
-def solve_and_print(input_parser, solver, part, input_file_name, do_submit=False):
-    text = f"{input_file_name}, part {part}:"
-    print(f"{text:<25}", answer := solver(*input_parser(input_file_name)))
-    if do_submit:
-        submit(answer, part)
 
 
 # It's ok to use lru_cache since we will never run solving for more than a single day in one process
@@ -92,9 +86,33 @@ def _read_list(input_file_name, split_char, cast_to):
     return list(map(cast_to, read(input_file_name).split(split_char)))
 
 
+@lru_cache()
 def read(input_file_name=DataName.PUZZLE):
     with open(_create_data_dirpath(_get_day_num()) / input_file_name) as f:
         return f.read().strip()
+
+
+def print_call(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return_val = func(*args, **kwargs)
+        _kwargs_str = _dict_to_str(inspect.getcallargs(func, *args, **kwargs))
+        print("---")
+        print(f">> {func.__name__}({_truncate_text(_kwargs_str, 50)})")
+        print(f"{return_val}")
+        return return_val
+
+    return wrapper
+
+
+def _dict_to_str(_dict):
+    return ", ".join(starmap(lambda k, v: f"{k}={repr(v)}", _dict.items()))
+
+
+def _truncate_text(text, max_len):
+    if len(text) < max_len:
+        return text
+    return text[:max_len] + "..."
 
 
 def _get_caller_filepath():
