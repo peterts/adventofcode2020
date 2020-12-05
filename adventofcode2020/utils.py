@@ -19,6 +19,7 @@ PROJECT_ROOT_PATH = Path(__file__).parents[1]
 class DataName:
     SAMPLE_1 = "sample1.txt"
     SAMPLE_2 = "sample2.txt"
+    SAMPLE_3 = "sample3.txt"
     PUZZLE = "puzzle.txt"
 
 
@@ -95,11 +96,10 @@ def read(input_file_name=DataName.PUZZLE):
 def print_call(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        return_val = func(*args, **kwargs)
         _kwargs_str = _dict_to_str(inspect.getcallargs(func, *args, **kwargs))
         print("---")
         print(f">> {func.__name__}({_truncate_text(_kwargs_str, 50)})")
-        print(return_val)
+        print(return_val := func(*args, **kwargs))
         return return_val
 
     return wrapper
@@ -133,7 +133,20 @@ def _create_data_dirpath(day_num):
 
 def pattern_extract(pattern, text, *types):
     if (match := re.search(pattern, text)) is None:
-        return []
+        return None
+    return _cast_match_groups(match, types)
+
+
+def pattern_extract_iter(pattern, text, *types):
+    for match in re.finditer(pattern, text):
+        yield _cast_match_groups(match, types)
+
+
+def pattern_extract_all(pattern, text, *types):
+    return list(pattern_extract_iter(pattern, text, *types))
+
+
+def _cast_match_groups(match, types):
     return [t(g) for g, t in zip(match.groups(), types)]
 
 
