@@ -1,7 +1,5 @@
 from collections import Counter
 
-from more_itertools import quantify
-
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
