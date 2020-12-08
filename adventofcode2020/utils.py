@@ -152,3 +152,55 @@ def _cast_match_groups(match, types):
 
 def product(iterable):
     return reduce(lambda a, b: a * b, iterable)
+
+
+class GameConsole:
+    def __init__(self, instructions_or_file_name):
+        if isinstance(instructions_or_file_name, str):
+            instructions = self.read_and_parse_instructions(instructions_or_file_name)
+        else:
+            instructions = instructions_or_file_name
+
+        self.instructions = instructions
+        self.accumulator = 0
+        self.pos = 0
+        self.traceback = []
+        self.running = True
+
+    @staticmethod
+    def read_and_parse_instructions(file_name):
+        instructions = []
+        for instruction in read_line_separated_list(file_name):
+            opr, val = pattern_extract("(\w{3}) ((?:\+|\-)\d+)", instruction, str, int)
+            instructions.append((opr, val))
+        return instructions
+
+    @property
+    def instruction(self):
+        if self.terminated:
+            return "exit", 0
+        return self.instructions[self.pos]
+
+    @property
+    def terminated(self):
+        return self.pos == len(self.instructions)
+
+    def run(self):
+        while self.running:
+            self.traceback.append(self.pos)
+            opr, val = self.instruction
+            getattr(self, opr)(val)
+
+    def acc(self, val):
+        self.accumulator += val
+        self.jmp(1)
+
+    def nop(self, _):
+        self.jmp(1)
+
+    def jmp(self, val):
+        self.pos += val
+        self.running = self.pos not in self.traceback
+
+    def exit(self, _):
+        self.running = False
