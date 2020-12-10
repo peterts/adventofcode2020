@@ -1,4 +1,5 @@
 from collections import Counter, defaultdict
+from itertools import islice
 
 from cachetools import cached
 
@@ -47,7 +48,7 @@ def n_combos_less_than_3(x, i=0):
         return 1
     count = n_combos_less_than_3(x, i + 1)
     if x[i] + x[i + 1] <= 3:
-        x_reduced = (*x[:i], x[i] + x[i + 1], *x[i + 2 :])
+        x_reduced = (*islice(x, i), x[i] + x[i + 1], *islice(x, i + 2, None))
         count += n_combos_less_than_3(x_reduced, i)
     return count
 
