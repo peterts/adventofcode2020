@@ -11,6 +11,7 @@ advent-of-code-data = "^0.8.5"
 python-dotenv = "^0.15.0"
 more-itertools = "^8.6.0"
 pydantic = "^1.7.3"
+cachetools = "^4.1.1"
 
 [tool.poetry.dev-dependencies]
 
