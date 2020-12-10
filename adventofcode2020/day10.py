@@ -20,7 +20,7 @@ def solve_part1(file_name):
 
 @print_call
 def solve_part2(file_name):
-    diffs = _read_and_compute_diffs(file_name)
+    diffs = tuple(_read_and_compute_diffs(file_name))
     all_n_combos_less_than_3 = []
     i = 0
     while i < len(diffs):
@@ -41,15 +41,14 @@ def _read_and_compute_diffs(file_name):
     return diffs
 
 
-@cached(cache={}, key=lambda x, i=0: tuple(x))
+@cached(cache={}, key=lambda x, i=0: x)
 def n_combos_less_than_3(x, i=0):
     if i == len(x) - 1:
         return 1
     count = n_combos_less_than_3(x, i + 1)
     if x[i] + x[i + 1] <= 3:
-        y = list(x)
-        y[i : i + 2] = [x[i] + x[i + 1]]
-        count += n_combos_less_than_3(y, i)
+        x_reduced = (*x[:i], x[i] + x[i + 1], *x[i + 2 :])
+        count += n_combos_less_than_3(x_reduced, i)
     return count
 
 
