@@ -11,11 +11,9 @@ from adventofcode2020.utils import (
 
 @print_call
 def solve_part1(file_name):
-    instructions = read_line_separated_list(file_name)
-    direction = 0
-    pos_y, pos_x = 0, 0
+    direction, pos_y, pos_x = 0, 0, 0
 
-    for instruction in instructions:
+    for instruction in read_line_separated_list(file_name):
         opr, val = instruction[:1], int(instruction[1:])
         if opr == "L":
             direction += val
@@ -39,9 +37,7 @@ def solve_part1(file_name):
 
 @print_call
 def solve_part2(file_name):
-    instructions = read_line_separated_list(file_name)
-    pos_y, pos_x = 0, 0
-    w_pos_y, w_pos_x = 1, 10
+    pos_y, pos_x, w_pos_y, w_pos_x = 0, 0, 1, 10
 
     def rotate(deg):
         deg_rad = radians(deg)
@@ -50,7 +46,7 @@ def solve_part2(file_name):
             round(sin(deg_rad) * w_pos_x + cos(deg_rad) * w_pos_y),
         )
 
-    for instruction in instructions:
+    for instruction in read_line_separated_list(file_name):
         opr, val = instruction[:1], int(instruction[1:])
         if opr == "L":
             w_pos_x, w_pos_y = rotate(val)
