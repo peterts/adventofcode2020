@@ -14,6 +14,7 @@ def solve_part1(file_name):
     instructions = read_line_separated_list(file_name)
     direction = 0
     pos_y, pos_x = 0, 0
+
     for instruction in instructions:
         opr, val = instruction[:1], int(instruction[1:])
         if opr == "L":
@@ -32,6 +33,7 @@ def solve_part1(file_name):
             pos_x += val
         elif opr == "W":
             pos_x -= val
+
     return int(abs(pos_x) + abs(pos_y))
 
 
@@ -65,6 +67,7 @@ def solve_part2(file_name):
             w_pos_x += val
         elif opr == "W":
             w_pos_x -= val
+
     return int(abs(pos_x) + abs(pos_y))
 
 
