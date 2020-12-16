@@ -30,6 +30,14 @@ html5lib = ["html5lib"]
 lxml = ["lxml"]
 
 [[package]]
+name = "bitstring"
+version = "3.1.7"
+description = "Simple construction, analysis and modification of binary data."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "cachetools"
 version = "4.1.1"
 description = "Extensible memoizing collections and decorators"
@@ -186,7 +194,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b4af900cb47ed4680cbd7755fd4d1a1f4453de194b5c42edf7a5a2309c778c58"
+content-hash = "10863ef4e3e2ec3738d609a4214426d4fe3bcaa2fb81918ef1162fa5d174e783"
 
 [metadata.files]
 advent-of-code-data = [
@@ -196,6 +204,9 @@ beautifulsoup4 = [
     {file = "beautifulsoup4-4.9.3-py2-none-any.whl", hash = "sha256:4c98143716ef1cb40bf7f39a8e3eec8f8b009509e74904ba3a7b315431577e35"},
     {file = "beautifulsoup4-4.9.3-py3-none-any.whl", hash = "sha256:fff47e031e34ec82bf17e00da8f592fe7de69aeea38be00523c04623c04fb666"},
     {file = "beautifulsoup4-4.9.3.tar.gz", hash = "sha256:84729e322ad1d5b4d25f805bfa05b902dd96450f43842c4e99067d5e1369eb25"},
+]
+bitstring = [
+    {file = "bitstring-3.1.7.tar.gz", hash = "sha256:fdf3eb72b229d2864fb507f8f42b1b2c57af7ce5fec035972f9566de440a864a"},
 ]
 cachetools = [
     {file = "cachetools-4.1.1-py3-none-any.whl", hash = "sha256:513d4ff98dd27f85743a8dc0e92f55ddb1b49e060c2d5961512855cda2c01a98"},
