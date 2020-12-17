@@ -211,15 +211,6 @@ def add_tuples(tup1, tup2):
     return tuple(i + j for i, j in zip(tup1, tup2))
 
 
-def count_neighbors(board, pos):
-    counts = Counter()
-    for diff in itertools.product((0, 1, -1), repeat=len(pos)):
-        if not any(diff):
-            continue
-        counts[board[add_tuples(pos, diff)]] += 1
-    return counts
-
-
 def read_and_parse_board(file_name, n_extra_dim=0):
     board = read_line_separated_list(file_name)
     parsed_board = defaultdict(lambda: ".")
@@ -240,6 +231,15 @@ def update_board(board, dimensions, get_new_state):
         nb_counts = count_neighbors(board, pos)
         updated_board[pos] = get_new_state(board[pos], nb_counts)
     return updated_board
+
+
+def count_neighbors(board, pos):
+    counts = Counter()
+    for diff in itertools.product((0, 1, -1), repeat=len(pos)):
+        if not any(diff):
+            continue
+        counts[board[add_tuples(pos, diff)]] += 1
+    return counts
 
 
 def iterate_dimensions(dimensions):

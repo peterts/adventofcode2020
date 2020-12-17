@@ -21,12 +21,8 @@ def solve_part2(file_name):
 
 def _solve(file_name, n_extra_dim):
     board, dimensions = read_and_parse_board(file_name, n_extra_dim)
-
     for _ in range(6):
-        dimensions = increase_dimensions(dimensions)
-        updated_board = update_board(board, dimensions, _get_new_state)
-        board = updated_board
-
+        board = update_board(board, dimensions := increase_dimensions(dimensions), _get_new_state)
     return "".join(board.values()).count("#")
 
 
