@@ -1,8 +1,9 @@
 from collections import Counter, defaultdict
-from itertools import combinations, product, starmap
+from itertools import product
 
 from adventofcode2020.utils import (
     DataName,
+    count_neighbors,
     fetch_input_data_if_not_exists,
     print_call,
     read_line_separated_list,
@@ -16,9 +17,8 @@ def solve_part1(file_name):
     step = 0
     while 1:
         updated_board = defaultdict(lambda: ".")
-        for r in range(n_rows):
-            for c in range(n_cols):
-                updated_board[(r, c)] = _get_new_state(board, r, c)
+        for pos in product(range(n_rows), range(n_cols)):
+            updated_board[pos] = _get_new_state(board, pos)
         if (board_str := _board_to_str(board, n_rows, n_cols)) == _board_to_str(
             updated_board, n_rows, n_cols
         ):
@@ -28,21 +28,14 @@ def solve_part1(file_name):
     return Counter(board_str)["#"]
 
 
-def _get_new_state(board, r, c):
-    n_occupied = 0
-    for dr, dc in product((0, 1, -1), repeat=2):
-        if 0 == dr == dc:
-            continue
-        r2, c2 = r + dr, c + dc
-        if board[(r2, c2)] == "#":
-            n_occupied += 1
-        if n_occupied == 4:
-            break
-    if board[(r, c)] == "L" and n_occupied == 0:
+def _get_new_state(board, pos):
+    nb_counts = count_neighbors(board, pos)
+    n_occupied, state = nb_counts["#"], board[pos]
+    if state == "L" and n_occupied == 0:
         return "#"
-    if board[(r, c)] == "#" and n_occupied == 4:
+    if state == "#" and n_occupied >= 4:
         return "L"
-    return board[(r, c)]
+    return state
 
 
 def _board_to_str(board, n_rows, n_cols):

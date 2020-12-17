@@ -1,8 +1,9 @@
 import inspect
+import itertools
 import re
 from cmath import phase
+from collections import Counter
 from functools import lru_cache, reduce, wraps
-from itertools import starmap
 from math import pi, sqrt
 from pathlib import Path
 
@@ -106,7 +107,7 @@ def print_call(func):
 
 
 def _dict_to_str(_dict):
-    return ", ".join(starmap(lambda k, v: f"{k}={repr(v)}", _dict.items()))
+    return ", ".join(itertools.starmap(lambda k, v: f"{k}={repr(v)}", _dict.items()))
 
 
 def _truncate_text(text, max_len):
@@ -204,3 +205,16 @@ class GameConsole:
 
     def exit(self, _):
         self.running = False
+
+
+def add_tuples(tup1, tup2):
+    return tuple(i + j for i, j in zip(tup1, tup2))
+
+
+def count_neighbors(board, pos):
+    counts = Counter()
+    for diff in itertools.product((0, 1, -1), repeat=len(pos)):
+        if not any(diff):
+            continue
+        counts[board[add_tuples(pos, diff)]] += 1
+    return counts
