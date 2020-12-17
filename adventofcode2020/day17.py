@@ -1,14 +1,11 @@
-from collections import defaultdict
-from itertools import product
-
 from adventofcode2020.utils import (
     DataName,
-    add_tuples,
-    count_neighbors,
     fetch_input_data_if_not_exists,
+    increase_dimensions,
     print_call,
-    read_line_separated_list,
+    read_and_parse_board,
     submit,
+    update_board,
 )
 
 
@@ -23,43 +20,18 @@ def solve_part2(file_name):
 
 
 def _solve(file_name, n_extra_dim):
-    board, dimensions = _read_and_parse_board(file_name, n_extra_dim)
+    board, dimensions = read_and_parse_board(file_name, n_extra_dim)
 
     for _ in range(6):
-        dimensions = _increase_dimensions(dimensions)
-        updated_board = defaultdict(lambda: ".")
-        for pos in _iterate_dimensions(dimensions):
-            updated_board[pos] = _get_new_state(board, pos)
+        dimensions = increase_dimensions(dimensions)
+        updated_board = update_board(board, dimensions, _get_new_state)
         board = updated_board
 
     return "".join(board.values()).count("#")
 
 
-def _iterate_dimensions(dimensions):
-    return product(*(range(i, j) for i, j in dimensions))
-
-
-def _increase_dimensions(dimensions):
-    return [add_tuples(dim, (-1, 1)) for dim in dimensions]
-
-
-def _read_and_parse_board(file_name, n_extra_dim):
-    board = read_line_separated_list(file_name)
-    parsed_board = defaultdict(lambda: ".")
-    pos_extra_dim = tuple(0 for _ in range(n_extra_dim))
-    for r, row in enumerate(board):
-        for c, char in enumerate(row):
-            parsed_board[(r, c, *pos_extra_dim)] = char
-    return parsed_board, [
-        (0, len(board)),
-        (0, len(board[0])),
-        *((0, 1) for _ in range(n_extra_dim)),
-    ]
-
-
-def _get_new_state(board, pos):
-    nb_counts = count_neighbors(board, pos)
-    if board[pos] == "#":
+def _get_new_state(state, nb_counts):
+    if state == "#":
         if 2 <= nb_counts["#"] <= 3:
             return "#"
         return "."

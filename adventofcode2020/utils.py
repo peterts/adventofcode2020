@@ -2,7 +2,7 @@ import inspect
 import itertools
 import re
 from cmath import phase
-from collections import Counter
+from collections import Counter, defaultdict
 from functools import lru_cache, reduce, wraps
 from math import pi, sqrt
 from pathlib import Path
@@ -218,3 +218,33 @@ def count_neighbors(board, pos):
             continue
         counts[board[add_tuples(pos, diff)]] += 1
     return counts
+
+
+def read_and_parse_board(file_name, n_extra_dim=0):
+    board = read_line_separated_list(file_name)
+    parsed_board = defaultdict(lambda: ".")
+    pos_extra_dim = tuple(0 for _ in range(n_extra_dim))
+    for r, row in enumerate(board):
+        for c, char in enumerate(row):
+            parsed_board[(r, c, *pos_extra_dim)] = char
+    return parsed_board, [
+        (0, len(board)),
+        (0, len(board[0])),
+        *((0, 1) for _ in range(n_extra_dim)),
+    ]
+
+
+def update_board(board, dimensions, get_new_state):
+    updated_board = defaultdict(lambda: ".")
+    for pos in iterate_dimensions(dimensions):
+        nb_counts = count_neighbors(board, pos)
+        updated_board[pos] = get_new_state(board[pos], nb_counts)
+    return updated_board
+
+
+def iterate_dimensions(dimensions):
+    return itertools.product(*(range(i, j) for i, j in dimensions))
+
+
+def increase_dimensions(dimensions):
+    return [add_tuples(dim, (-1, 1)) for dim in dimensions]

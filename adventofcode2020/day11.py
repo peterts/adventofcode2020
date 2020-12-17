@@ -6,19 +6,20 @@ from adventofcode2020.utils import (
     count_neighbors,
     fetch_input_data_if_not_exists,
     print_call,
+    read_and_parse_board,
     read_line_separated_list,
     submit,
+    update_board,
 )
 
 
 @print_call
 def solve_part1(file_name):
-    board, n_rows, n_cols = _read_and_parse_board(file_name)
+    board, dimensions = read_and_parse_board(file_name)
+    n_rows, n_cols = dimensions[0][1], dimensions[1][1]
     step = 0
     while 1:
-        updated_board = defaultdict(lambda: ".")
-        for pos in product(range(n_rows), range(n_cols)):
-            updated_board[pos] = _get_new_state(board, pos)
+        updated_board = update_board(board, dimensions, _get_new_state)
         if (board_str := _board_to_str(board, n_rows, n_cols)) == _board_to_str(
             updated_board, n_rows, n_cols
         ):
@@ -28,9 +29,8 @@ def solve_part1(file_name):
     return Counter(board_str)["#"]
 
 
-def _get_new_state(board, pos):
-    nb_counts = count_neighbors(board, pos)
-    n_occupied, state = nb_counts["#"], board[pos]
+def _get_new_state(state, nb_counts):
+    n_occupied = nb_counts["#"]
     if state == "L" and n_occupied == 0:
         return "#"
     if state == "#" and n_occupied >= 4:
@@ -46,15 +46,6 @@ def _board_to_str(board, n_rows, n_cols):
             row += board.get((r, c), ".")
         board_str += row + "\n"
     return board_str
-
-
-def _read_and_parse_board(file_name):
-    board = read_line_separated_list(file_name)
-    parsed_board = defaultdict(lambda: ".")
-    for r, row in enumerate(board):
-        for c, char in enumerate(row):
-            parsed_board[(r, c)] = char
-    return parsed_board, len(board), len(board[0])
 
 
 @print_call
