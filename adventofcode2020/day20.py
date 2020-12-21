@@ -84,10 +84,6 @@ def _get_tile_positions(tiles):
     n = int(sqrt(n2))
 
     def index(r, c):
-        if r < 0:
-            r = n + r
-        if c < 0:
-            c = n + c
         return r * n + c
 
     option_per_tile = list(map(_get_all_orientations, tiles))
