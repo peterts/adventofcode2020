@@ -248,3 +248,7 @@ def iterate_dimensions(dimensions):
 
 def increase_dimensions(dimensions):
     return [add_tuples(dim, (-1, 1)) for dim in dimensions]
+
+
+def a_is_subset_of_b(a, b):
+    return all(x in b for x in a)
