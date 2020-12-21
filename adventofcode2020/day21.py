@@ -30,9 +30,7 @@ def solve_part1(file_name):
 
 @print_call
 def solve_part2(file_name):
-    _, cant_be_allergen, possible_ing_per_allergen = _find_which_allergens_each_ingredient_cant_be(
-        file_name
-    )
+    _, _, possible_ing_per_allergen = _find_which_allergens_each_ingredient_cant_be(file_name)
 
     fixed = {}
     while possible_ing_per_allergen:
