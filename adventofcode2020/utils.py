@@ -151,7 +151,7 @@ def _cast_match_groups(match, types):
     return [t(g) for g, t in zip(match.groups(), types)]
 
 
-def product(iterable):
+def multiply(iterable):
     return reduce(lambda a, b: a * b, iterable)
 
 

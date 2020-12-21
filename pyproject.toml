@@ -12,8 +12,8 @@ python-dotenv = "^0.15.0"
 more-itertools = "^8.6.0"
 pydantic = "^1.7.3"
 cachetools = "^4.1.1"
-bitstring = "^3.1.7"
 pyparsing = "^2.4.7"
+nltk = "^3.5"
 
 [tool.poetry.dev-dependencies]
 

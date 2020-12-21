@@ -5,9 +5,9 @@ import numpy as np
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
+    multiply,
     pattern_extract_all,
     print_call,
-    product,
     read,
     submit,
 )
@@ -67,7 +67,7 @@ def solve_part2(file_name, prefix):
         if rules[rule_num][0].startswith(prefix):
             prod.append(your_ticket[pos])
 
-    return product(prod)
+    return multiply(prod)
 
 
 def _read_and_parse_data(file_name):

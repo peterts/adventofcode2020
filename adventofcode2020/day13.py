@@ -3,9 +3,9 @@ from more_itertools import flatten, unzip
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
+    multiply,
     pattern_extract_all,
     print_call,
-    product,
     read_line_separated_list,
     submit,
 )
@@ -34,7 +34,7 @@ def solve_part2(file_name):
 
 # Source: https://fangya.medium.com/chinese-remainder-theorem-with-python-a483de81fbb8
 def chinese_remainder(modulus, remainders):
-    prod = product(modulus)
+    prod = multiply(modulus)
     residual = 0
     for m, r in zip(modulus, remainders):
         residual += r * mul_inv(p := prod // m, m) * p

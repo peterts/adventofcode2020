@@ -6,8 +6,8 @@ from cachetools import cached
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
+    multiply,
     print_call,
-    product,
     read_line_separated_list,
     submit,
 )
@@ -30,7 +30,7 @@ def solve_part2(file_name):
             j += 1
         all_n_combos_less_than_3.append(n_combos_less_than_3(diffs[i:j]))
         i = j
-    return product(all_n_combos_less_than_3)
+    return multiply(all_n_combos_less_than_3)
 
 
 def _read_and_compute_diffs(file_name):

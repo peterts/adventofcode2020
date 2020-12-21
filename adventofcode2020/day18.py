@@ -4,8 +4,8 @@ from itertools import product
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
+    multiply,
     print_call,
-    product,
     read_line_separated_list,
     submit,
 )
@@ -25,7 +25,7 @@ def zum(match):
 
 
 def _mul(nums_str):
-    return str(product(map(int, nums_str.split(" * "))))
+    return str(multiply(map(int, nums_str.split(" * "))))
 
 
 def _zum(nums_str):

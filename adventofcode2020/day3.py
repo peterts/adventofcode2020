@@ -1,8 +1,8 @@
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
+    multiply,
     print_call,
-    product,
     read_line_separated_list,
     submit,
 )
@@ -17,7 +17,7 @@ def solve_part1(file_name):
 @print_call
 def solve_part2(file_name):
     wood = read_line_separated_list(file_name)
-    return product([_count_trees(wood, s) for s in [(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)]])
+    return multiply([_count_trees(wood, s) for s in [(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)]])
 
 
 def _count_trees(wood, steps):

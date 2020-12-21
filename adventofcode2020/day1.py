@@ -6,8 +6,8 @@ from more_itertools import first_true
 from adventofcode2020.utils import (
     DataName,
     fetch_input_data_if_not_exists,
+    multiply,
     print_call,
-    product,
     read_line_separated_list,
     submit,
 )
@@ -16,7 +16,7 @@ from adventofcode2020.utils import (
 @print_call
 def product_where_sum_of_combo_equals_n(combo_length, n, file_name):
     values = read_line_separated_list(file_name, int)
-    return product(first_true(combinations(values, combo_length), pred=lambda c: sum(c) == n))
+    return multiply(first_true(combinations(values, combo_length), pred=lambda c: sum(c) == n))
 
 
 if __name__ == "__main__":
