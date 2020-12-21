@@ -23,19 +23,11 @@ def solve_part1(file_name):
     return multiply(map(lambda i: tiles[tile_nums[i]][0], (0, n - 1, n2 - n, n2 - 1)))
 
 
-def _read_tiles(file_name):
-    def _get_id_and_tile(block):
-        _id, *tile = block.split("\n")
-        return int(_id[len("Tile ") : -1]), np.asarray([[x for x in row] for row in tile])
-
-    return list(map(_get_id_and_tile, read(file_name).split("\n\n")))
-
-
 @print_call
 def solve_part2(file_name):
     tiles = _read_tiles(file_name)
 
-    mask = seamonster_mask()
+    mask = _make_seamonster_mask()
     n_in_mask = mask.sum()
     h, w = mask.shape
 
@@ -65,7 +57,7 @@ def solve_part2(file_name):
     return None
 
 
-def seamonster_mask():
+def _make_seamonster_mask():
     seamonster_str = """
                       # 
     #    ##    ##    ###
@@ -75,6 +67,14 @@ def seamonster_mask():
         map(lambda line: line[4:], filter(lambda x: x.strip(), seamonster_str.splitlines()))
     )
     return np.asarray([[x == "#" for x in line] for line in seamonster_lines])
+
+
+def _read_tiles(file_name):
+    def _get_id_and_tile(block):
+        _id, *tile = block.split("\n")
+        return int(_id[len("Tile ") : -1]), np.asarray([[x for x in row] for row in tile])
+
+    return list(map(_get_id_and_tile, read(file_name).split("\n\n")))
 
 
 def _get_tile_positions(tiles):
