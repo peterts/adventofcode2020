@@ -207,10 +207,6 @@ class GameConsole:
         self.running = False
 
 
-def add_tuples(tup1, tup2):
-    return tuple(i + j for i, j in zip(tup1, tup2))
-
-
 def read_and_parse_board(file_name, n_extra_dim=0):
     board = read_line_separated_list(file_name)
     parsed_board = defaultdict(lambda: ".")
@@ -223,6 +219,10 @@ def read_and_parse_board(file_name, n_extra_dim=0):
         (0, len(board[0])),
         *((0, 1) for _ in range(n_extra_dim)),
     ]
+
+
+def add_tuples(tup1, tup2):
+    return tuple(i + j for i, j in zip(tup1, tup2))
 
 
 def update_board(board, dimensions, get_new_state):
